@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, TrendingUp, Package, Star, ChevronRight, Menu, X, Send, BarChart3 } from 'lucide-react';
+import { Mail, TrendingUp, Package, Star, ChevronRight, Menu, X, Send, BarChart3, Building2 } from 'lucide-react';
 
 // 🔥 TRACKING SYSTEM
 const trackEvent = (category, action, label = '') => {
@@ -20,18 +20,27 @@ const trackEvent = (category, action, label = '') => {
 
 const getTopProducts = () => {
   return [
-    { name: 'Cerveja 2M', sales: 3420, trend: '+12%' },
-    { name: 'Vinho Duas Quintas', sales: 1850, trend: '+8%' },
+    { name: 'Cerveja 2M', sales: 3420, trend: '+12%', brand: 'CDM' },
+    { name: 'Vinho Duas Quintas', sales: 1850, trend: '+8%', brand: 'Sogrape' },
   ];
 };
 
 const getNewArrivals = () => {
   return [
-    { name: 'Gin Tanqueray London Dry', size: '750ml', type: 'Gin' },
-    { name: 'Cerveja Sagres Radler', size: '330ml', type: 'Cerveja' },
-    { name: 'Whiskey Jameson Black Barrel', size: '700ml', type: 'Whiskey' },
+    { name: 'Gin Tanqueray London Dry', size: '750ml', type: 'Gin', brand: 'Diageo' },
+    { name: 'Cerveja Sagres Radler', size: '330ml', type: 'Cerveja', brand: 'Heineken' },
+    { name: 'Whiskey Jameson Black Barrel', size: '700ml', type: 'Whiskey', brand: 'Pernod Ricard' },
   ];
 };
+
+// APIBA Members
+const apibaMembers = [
+  { name: 'CDM', fullName: 'Cervejas de Moçambique', brands: ['2M', 'Laurentina', 'Manica', 'Impala', 'Budweiser', 'Castle Lite'] },
+  { name: 'Pernod Ricard', fullName: 'Pernod Ricard Moçambique', brands: ['Jameson', 'Chivas Regal', 'Absolut', 'Beefeater', 'Havana Club'] },
+  { name: 'Heineken', fullName: 'Heineken Moçambique', brands: ['Heineken', 'Amstel', 'Sagres'] },
+  { name: 'Diageo', fullName: 'Diageo Moçambique', brands: ['Johnnie Walker', 'Smirnoff', 'Captain Morgan', 'Guinness', 'Tanqueray'] },
+  { name: 'Socimpex', fullName: 'Socimpex Moçambique', brands: ['Várias marcas importadas'] },
+];
 
 export default function App() {
   const [activeView, setActiveView] = useState('newsletter');
@@ -66,142 +75,200 @@ export default function App() {
     const newArrivals = getNewArrivals();
 
     return (
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <div className="border-b border-gray-200 pb-6 mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-500">Newsletter Mensal</span>
-            <span className="text-xs text-gray-400">Novembro 2025</span>
+      <div className="max-w-2xl mx-auto">
+        {/* MBA Header with Logo */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">MB</span>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">MBA</h2>
+              <p className="text-sm text-gray-600">Mozambican Beverage Agency</p>
+              <p className="text-xs text-gray-500 mt-1">Membro da APIBA</p>
+            </div>
           </div>
-          <h1 className="text-2xl font-light text-gray-900 mb-1">
-            Novembro chegou — e com ele, o calor e as bebidas certas
-          </h1>
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <Building2 className="w-4 h-4" />
+            <span>Representando produtores e importadores de bebidas em Moçambique</span>
+          </div>
         </div>
 
-        <div className="prose prose-sm max-w-none">
-          <p className="text-gray-700 leading-relaxed mb-6">
-            Novembro em Maputo é assim: o calor volta devagar, as tardes esticam, e as conversas ganham tempo. 
-            Este mês trouxemos de volta alguns favoritos e estreámos opções novas. Aqui está o que chegou e o que está a sair rápido.
-          </p>
-
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Package className="w-5 h-5 text-gray-600" />
-              <h2 className="text-lg font-medium text-gray-900">Novos em stock</h2>
+        {/* Newsletter Content */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
+          <div className="border-b border-gray-200 pb-6 mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-500">Newsletter Mensal</span>
+              <span className="text-xs text-gray-400">Novembro 2025</span>
             </div>
-            
-            <div className="space-y-4">
-              {newArrivals.map((product, i) => (
-                <div 
-                  key={i}
-                  className="border-l-2 border-gray-300 pl-4 cursor-pointer hover:border-blue-500 transition-colors"
-                  onClick={() => handleProductClick(product.name)}
-                >
-                  <h3 className="font-medium text-gray-900">{product.name} ({product.size})</h3>
-                  <p className="text-sm text-gray-600">
-                    {product.type === 'Gin' && 'Clássico inglês, limpo, com notas de zimbro. Funciona bem com tónica ou num G&T simples.'}
-                    {product.type === 'Cerveja' && 'Leve, com toque cítrico. Perfeita para quem quer algo refrescante sem o peso de uma imperial completa.'}
-                    {product.type === 'Whiskey' && 'Suave, com final de baunilha e carvalho. Para quem gosta de whiskey irlandês mas procura algo com mais corpo.'}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <h1 className="text-2xl font-light text-gray-900 mb-1">
+              Novembro chegou — e com ele, o calor e as bebidas certas
+            </h1>
           </div>
 
-          <div className="bg-blue-50 rounded-lg p-6 mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-blue-600" />
-              <h2 className="text-lg font-medium text-gray-900">O que as pessoas estão a comprar</h2>
-            </div>
-            
-            <div className="space-y-4">
-              {topProducts.map((product, i) => (
-                <div 
-                  key={i}
-                  className="border-l-2 border-blue-300 pl-4 cursor-pointer hover:border-blue-600 transition-colors"
-                  onClick={() => handleProductClick(product.name)}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-gray-900">{product.name}</h3>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{product.trend}</span>
+          <div className="prose prose-sm max-w-none">
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Novembro em Maputo é assim: o calor volta devagar, as tardes esticam, e as conversas ganham tempo. 
+              Este mês trouxemos de volta alguns favoritos e estreámos opções novas. Aqui está o que chegou e o que está a sair rápido.
+            </p>
+
+            <div className="bg-gray-50 rounded-lg p-6 mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Package className="w-5 h-5 text-gray-600" />
+                <h2 className="text-lg font-medium text-gray-900">Novos em stock</h2>
+              </div>
+              
+              <div className="space-y-4">
+                {newArrivals.map((product, i) => (
+                  <div 
+                    key={i}
+                    className="border-l-2 border-gray-300 pl-4 cursor-pointer hover:border-blue-500 transition-colors"
+                    onClick={() => handleProductClick(product.name)}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-medium text-gray-900">{product.name} ({product.size})</h3>
+                      <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">{product.brand}</span>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {product.type === 'Gin' && 'Clássico inglês, limpo, com notas de zimbro. Funciona bem com tónica ou num G&T simples.'}
+                      {product.type === 'Cerveja' && 'Leve, com toque cítrico. Perfeita para quem quer algo refrescante sem o peso de uma imperial completa.'}
+                      {product.type === 'Whiskey' && 'Suave, com final de baunilha e carvalho. Para quem gosta de whiskey irlandês mas procura algo com mais corpo.'}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {i === 0 ? 'Continua a liderar. Não há surpresa aqui — é local, é fresca, e está em todo o lado.' : 
-                     'Também está a sair bem. Português, acessível, e combina com quase tudo.'}
-                  </p>
-                </div>
-              ))}
-              <div className="bg-white rounded p-3 text-sm text-gray-600 italic">
-                Observámos que muita gente compra às sextas para o fim de semana. Talvez seja o ritual de começar o descanso com algo familiar.
+                ))}
               </div>
             </div>
-          </div>
 
-          <div className="bg-amber-50 rounded-lg p-6 mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Star className="w-5 h-5 text-amber-600" />
-              <h2 className="text-lg font-medium text-gray-900">Vale a pena experimentar</h2>
-            </div>
-            
-            <div 
-              className="border-l-2 border-amber-300 pl-4 cursor-pointer hover:border-amber-600 transition-colors"
-              onClick={() => handleProductClick('Amarula Cream')}
-            >
-              <h3 className="font-medium text-gray-900">Amarula Cream (750ml)</h3>
-              <p className="text-sm text-gray-600">
-                Licor sul-africano feito com marula. Doce, cremoso, mas não enjoa. Funciona sozinho com gelo ou sobre gelado. 
-                É daquelas bebidas que surpreendem quem nunca provou.
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-200 pt-6">
-            <p className="text-sm text-gray-600 mb-4">
-              Obrigado por continuarem a escolher a MBA. Se precisarem de algo específico ou tiverem dúvidas, 
-              podem ligar para <span className="font-medium">+258 84 XXX XXXX</span> ou passar na nossa loja 
-              (Av. Julius Nyerere, aberto de segunda a sábado, 9h–18h).
-            </p>
-            <p className="text-sm text-gray-600">Até a próxima edição.</p>
-          </div>
-
-          <div className="mt-6 p-4 bg-gray-100 rounded">
-            <p className="text-sm text-gray-600 mb-3">
-              <strong>P.S.</strong> — Há alguma bebida que procuram e não encontram?
-            </p>
-            {!showFeedback ? (
-              <button 
-                onClick={() => setShowFeedback(true)}
-                className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors flex items-center gap-2"
-              >
-                <Send className="w-4 h-4" />
-                Dizer o que procuro
-              </button>
-            ) : (
-              <form onSubmit={handleFeedbackSubmit} className="space-y-3">
-                <input 
-                  type="text"
-                  value={feedbackText}
-                  onChange={(e) => setFeedbackText(e.target.value)}
-                  placeholder="Ex: Vodka Grey Goose, Cerveja Corona..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
-                  required
-                />
-                <div className="flex gap-2">
-                  <button 
-                    type="submit"
-                    className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            <div className="bg-blue-50 rounded-lg p-6 mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-5 h-5 text-blue-600" />
+                <h2 className="text-lg font-medium text-gray-900">O que as pessoas estão a comprar</h2>
+              </div>
+              
+              <div className="space-y-4">
+                {topProducts.map((product, i) => (
+                  <div 
+                    key={i}
+                    className="border-l-2 border-blue-300 pl-4 cursor-pointer hover:border-blue-600 transition-colors"
+                    onClick={() => handleProductClick(product.name)}
                   >
-                    Enviar
-                  </button>
-                  <button 
-                    type="button"
-                    onClick={() => setShowFeedback(false)}
-                    className="text-sm bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                  >
-                    Cancelar
-                  </button>
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-medium text-gray-900">{product.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">{product.brand}</span>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{product.trend}</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {i === 0 ? 'Continua a liderar. Não há surpresa aqui — é local, é fresca, e está em todo o lado.' : 
+                       'Também está a sair bem. Português, acessível, e combina com quase tudo.'}
+                    </p>
+                  </div>
+                ))}
+                <div className="bg-white rounded p-3 text-sm text-gray-600 italic">
+                  Observámos que muita gente compra às sextas para o fim de semana. Talvez seja o ritual de começar o descanso com algo familiar.
                 </div>
-              </form>
-            )}
+              </div>
+            </div>
+
+            <div className="bg-amber-50 rounded-lg p-6 mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="w-5 h-5 text-amber-600" />
+                <h2 className="text-lg font-medium text-gray-900">Vale a pena experimentar</h2>
+              </div>
+              
+              <div 
+                className="border-l-2 border-amber-300 pl-4 cursor-pointer hover:border-amber-600 transition-colors"
+                onClick={() => handleProductClick('Amarula Cream')}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-medium text-gray-900">Amarula Cream (750ml)</h3>
+                  <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">África do Sul</span>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Licor sul-africano feito com marula. Doce, cremoso, mas não enjoa. Funciona sozinho com gelo ou sobre gelado. 
+                  É daquelas bebidas que surpreendem quem nunca provou.
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6">
+              <p className="text-sm text-gray-600 mb-4">
+                Obrigado por continuarem a escolher a MBA. Se precisarem de algo específico ou tiverem dúvidas, 
+                podem ligar para <span className="font-medium">+258 84 XXX XXXX</span> ou passar na nossa loja 
+                (Av. Julius Nyerere, aberto de segunda a sábado, 9h–18h).
+              </p>
+              <p className="text-sm text-gray-600">Até a próxima edição.</p>
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-100 rounded">
+              <p className="text-sm text-gray-600 mb-3">
+                <strong>P.S.</strong> — Há alguma bebida que procuram e não encontram?
+              </p>
+              {!showFeedback ? (
+                <button 
+                  onClick={() => setShowFeedback(true)}
+                  className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors flex items-center gap-2"
+                >
+                  <Send className="w-4 h-4" />
+                  Dizer o que procuro
+                </button>
+              ) : (
+                <form onSubmit={handleFeedbackSubmit} className="space-y-3">
+                  <input 
+                    type="text"
+                    value={feedbackText}
+                    onChange={(e) => setFeedbackText(e.target.value)}
+                    placeholder="Ex: Vodka Grey Goose, Cerveja Corona..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                    required
+                  />
+                  <div className="flex gap-2">
+                    <button 
+                      type="submit"
+                      className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Enviar
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setShowFeedback(false)}
+                      className="text-sm bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* APIBA Members Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-1">Membros da APIBA</h3>
+            <p className="text-xs text-gray-600">Associação dos Produtores e Importadores de Bebidas Alcoólicas</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {apibaMembers.map((member, i) => (
+              <div key={i} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="font-medium text-gray-900 mb-1">{member.name}</div>
+                <div className="text-xs text-gray-600 mb-2">{member.fullName}</div>
+                <div className="flex flex-wrap gap-1">
+                  {member.brands.slice(0, 3).map((brand, j) => (
+                    <span key={j} className="text-xs bg-white text-gray-700 px-2 py-1 rounded border border-gray-200">
+                      {brand}
+                    </span>
+                  ))}
+                  {member.brands.length > 3 && (
+                    <span className="text-xs text-gray-500 px-2 py-1">
+                      +{member.brands.length - 3} mais
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -394,9 +461,14 @@ export default function App() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div>
-              <h1 className="text-xl font-light text-gray-900">MBA Newsletter System</h1>
-              <p className="text-xs text-gray-500">Mozambican Beverage Agency</p>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-black rounded flex items-center justify-center">
+                <span className="text-white text-lg font-bold">MB</span>
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-gray-900">MBA</h1>
+                <p className="text-xs text-gray-500">Newsletter System</p>
+              </div>
             </div>
             
             <nav className="hidden md:flex items-center gap-6">
