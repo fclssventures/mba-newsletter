@@ -201,7 +201,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Market Intelligence - What's Selling */}
+            {/* Market Intelligence */}
             <div className="bg-amber-50 rounded-lg p-6 mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-amber-600" />
@@ -242,7 +242,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* CTA / Contact */}
+            {/* Contact */}
             <div className="border-t border-gray-200 pt-6">
               <p className="text-sm text-gray-600 mb-4">
                 A MBA conecta a informação dos produtores e importadores ao mercado. Para consultas directas, 
@@ -250,7 +250,7 @@ export default function App() {
               </p>
             </div>
 
-            {/* Feedback Loop */}
+            {/* Feedback */}
             <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-gray-50 rounded-lg border border-blue-200">
               <p className="text-sm text-gray-700 mb-3">
                 <strong>💬 Feedback ao mercado:</strong> Há algo que procura e não encontra? A MBA transmite a mensagem aos nossos parceiros.
@@ -294,7 +294,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* APIBA Partners Section */}
+        {/* APIBA Partners */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="mb-4">
             <h3 className="text-lg font-medium text-gray-900 mb-1">Parceiros APIBA</h3>
@@ -515,145 +515,140 @@ export default function App() {
         <h3 className="font-medium text-gray-900 mb-4">Próximos Passos de Evolução</h3>
         <div className="space-y-3 text-sm">
           <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium flex-shrink-0">2</div>
-            <div>
-              <div className="font-medium text-gray-900">Conteúdo Automatizado</div>
-              <div className="text-gray-600">Claude API gera edições baseadas em dados de vendas dos clientes</div>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium flex-shrink-0">3</div>
-            <div>
-              <div className="font-medium text-gray-900">Slots Patrocinados</div>
-              <div className="text-gray-600">Secções "Em Destaque" pagas para maior exposição de produtos específicos</div>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium flex-shrink-0">4</div>
-            <div>
-              <div className="font-medium text-gray-900">Relatórios de Mercado</div>
-              <div className="text-gray-600">Vendas mensais como serviço premium para distribuidores e bares</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-900 rounded flex items-center justify-center">
-                <span className="text-white text-base font-bold">MBA</span>
-              </div>
-              <div>
-                <h1 className="text-base font-bold text-gray-900">MBA</h1>
-                <p className="text-xs text-gray-500">Agência de Informação</p>
-              </div>
-            </div>
-            
-            <nav className="hidden md:flex items-center gap-6">
-              <button
-                onClick={() => setActiveView('newsletter')}
-                className={`text-sm transition-colors ${
-                  activeView === 'newsletter' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Newsletter
-              </button>
-              <button
-                onClick={() => setActiveView('analytics')}
-                className={`text-sm transition-colors ${
-                  activeView === 'analytics' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Analytics
-              </button>
-              <button
-                onClick={() => setActiveView('system')}
-                className={`text-sm transition-colors ${
-                  activeView === 'system' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Sistema
-              </button>
-            </nav>
-
-            <button 
-              className="md:hidden p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-          {mobileMenuOpen && (
-            <nav className="md:hidden py-4 border-t border-gray-200">
-              <button
-                onClick={() => { setActiveView('newsletter'); setMobileMenuOpen(false); }}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-              >
-                Newsletter
-              </button>
-              <button
-                onClick={() => { setActiveView('analytics'); setMobileMenuOpen(false); }}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-              >
-                Analytics
-              </button>
-              <button
-                onClick={() => { setActiveView('system'); setMobileMenuOpen(false); }}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-              >
-                Sistema
-              </button>
-            </nav>
-          )}
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {activeView === 'newsletter' && <NewsletterView />}
-        {activeView === 'analytics' && <AnalyticsView />}
-        {activeView === 'system' && <SystemView />}
-      </main>
-
-      <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid md:grid-cols-3 gap-8 text-sm">
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">MBA</h4>
-              <p className="text-gray-600 text-xs leading-relaxed">
-                Agência de informação e conteúdo para o sector de bebidas em Moçambique. 
-                Servidor de conteúdo para membros da APIBA.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">Contacto</h4>
-              <p className="text-gray-600 text-xs">+258 84 XXX XXXX</p>
-              <p className="text-gray-600 text-xs">Av. Julius Nyerere, Maputo</p>
-              <p className="text-gray-600 text-xs mt-2">Para consultas comerciais, contacte os nossos parceiros APIBA</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">O Que Fazemos</h4>
-              <p className="text-gray-600 text-xs">✓ Espaço e exposição</p>
-              <p className="text-gray-600 text-xs">✓ Vinculação de mensagens</p>
-              <p className="text-gray-600 text-xs">✓ Servidor de conteúdo</p>
-              <p className="text-gray-600 text-xs">✓ Inteligência de mercado</p>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-} text-xs font-medium flex-shrink-0">1</div>
+            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">1</div>
             <div>
               <div className="font-medium text-gray-900">Portal B2B para Clientes</div>
               <div className="text-gray-600">Dashboard onde APIBA members vêem analytics em tempo real das suas marcas</div>
             </div>
           </div>
           <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center
+            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">2</div>
+            <div>
+              <div className="font-medium text-gray-900">Conteúdo Automatizado</div>
+              <div className="text-gray-600">Claude API gera edições baseadas em dados de vendas dos clientes</div>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">3</div>
+            <div>
+              <div className="font-medium text-gray-900">Slots Patrocinados</div>
+              <div className="text-gray-600">Secções "Em Destaque" pagas para maior exposição de produtos específicos</div>
+</div>
+</div>
+<div className="flex gap-3">
+<div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">4</div>
+<div>
+<div className="font-medium text-gray-900">Relatórios de Mercado</div>
+<div className="text-gray-600">Vendas mensais como serviço premium para distribuidores e bares</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+);
+return (
+<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+<header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex items-center justify-between h-16">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 bg-gray-900 rounded flex items-center justify-center">
+<span className="text-white text-base font-bold">MBA</span>
+</div>
+<div>
+<h1 className="text-base font-bold text-gray-900">MBA</h1>
+<p className="text-xs text-gray-500">Agência de Informação</p>
+</div>
+</div> <nav className="hidden md:flex items-center gap-6">
+          <button
+            onClick={() => setActiveView('newsletter')}
+            className={`text-sm transition-colors ${
+              activeView === 'newsletter' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Newsletter
+          </button>
+          <button
+            onClick={() => setActiveView('analytics')}
+            className={`text-sm transition-colors ${
+              activeView === 'analytics' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Analytics
+          </button>
+          <button
+            onClick={() => setActiveView('system')}
+            className={`text-sm transition-colors ${
+              activeView === 'system' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Sistema
+          </button>
+        </nav>
+
+        <button 
+          className="md:hidden p-2"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {mobileMenuOpen && (
+        <nav className="md:hidden py-4 border-t border-gray-200">
+          <button
+            onClick={() => { setActiveView('newsletter'); setMobileMenuOpen(false); }}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+          >
+            Newsletter
+          </button>
+          <button
+            onClick={() => { setActiveView('analytics'); setMobileMenuOpen(false); }}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+          >
+            Analytics
+          </button>
+          <button
+            onClick={() => { setActiveView('system'); setMobileMenuOpen(false); }}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+          >
+            Sistema
+          </button>
+        </nav>
+      )}
+    </div>
+  </header>
+
+  <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {activeView === 'newsletter' && <NewsletterView />}
+    {activeView === 'analytics' && <AnalyticsView />}
+    {activeView === 'system' && <SystemView />}
+  </main>
+
+  <footer className="bg-white border-t border-gray-200 mt-16">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="grid md:grid-cols-3 gap-8 text-sm">
+        <div>
+          <h4 className="font-medium text-gray-900 mb-2">MBA</h4>
+          <p className="text-gray-600 text-xs leading-relaxed">
+            Agência de informação e conteúdo para o sector de bebidas em Moçambique. 
+            Servidor de conteúdo para membros da APIBA.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-900 mb-2">Contacto</h4>
+          <p className="text-gray-600 text-xs">+258 84 XXX XXXX</p>
+          <p className="text-gray-600 text-xs">Av. Julius Nyerere, Maputo</p>
+          <p className="text-gray-600 text-xs mt-2">Para consultas comerciais, contacte os nossos parceiros APIBA</p>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-900 mb-2">O Que Fazemos</h4>
+          <p className="text-gray-600 text-xs">✓ Espaço e exposição</p>
+          <p className="text-gray-600 text-xs">✓ Vinculação de mensagens</p>
+          <p className="text-gray-600 text-xs">✓ Servidor de conteúdo</p>
+          <p className="text-gray-600 text-xs">✓ Inteligência de mercado</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
