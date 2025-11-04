@@ -1,654 +1,276 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, TrendingUp, Package, Star, Menu, X, Send, BarChart3, Radio, Megaphone, Users } from 'lucide-react';
-
-// 🔥 TRACKING SYSTEM
-const trackEvent = (category, action, label = '') => {
-  const event = {
-    timestamp: new Date().toISOString(),
-    category,
-    action,
-    label,
-    location: 'Maputo, MZ',
-  };
-  
-  console.log('📊 Event Tracked:', event);
-  
-  const events = JSON.parse(localStorage.getItem('mba_analytics') || '[]');
-  events.push(event);
-  localStorage.setItem('mba_analytics', JSON.stringify(events));
-};
-
-const getTopProducts = () => {
-  return [
-    { name: 'Cerveja 2M', sales: 3420, trend: '+12%', brand: 'CDM', category: 'Cerveja' },
-    { name: 'Vinho Duas Quintas', sales: 1850, trend: '+8%', brand: 'Sogrape', category: 'Vinho' },
-  ];
-};
-
-const getNewArrivals = () => {
-  return [
-    { name: 'Gin Tanqueray London Dry', size: '750ml', type: 'Gin', brand: 'Diageo', sponsor: true },
-    { name: 'Cerveja Sagres Radler', size: '330ml', type: 'Cerveja', brand: 'Heineken', sponsor: false },
-    { name: 'Whiskey Jameson Black Barrel', size: '700ml', type: 'Whiskey', brand: 'Pernod Ricard', sponsor: true },
-  ];
-};
-
-// APIBA Members (MBA's clients)
-const apibaMembers = [
-  { name: 'CDM', fullName: 'Cervejas de Moçambique', brands: ['2M', 'Laurentina', 'Manica', 'Impala', 'Budweiser', 'Castle Lite'] },
-  { name: 'Pernod Ricard', fullName: 'Pernod Ricard Moçambique', brands: ['Jameson', 'Chivas Regal', 'Absolut', 'Beefeater', 'Havana Club'] },
-  { name: 'Heineken', fullName: 'Heineken Moçambique', brands: ['Heineken', 'Amstel', 'Sagres'] },
-  { name: 'Diageo', fullName: 'Diageo Moçambique', brands: ['Johnnie Walker', 'Smirnoff', 'Captain Morgan', 'Guinness', 'Tanqueray'] },
-  { name: 'Socimpex', fullName: 'Socimpex Moçambique', brands: ['Várias marcas importadas'] },
-];
+import React, { useState } from 'react';
+import { Wine, Beer, Martini, Flame, TrendingUp, Star, Mail, Menu, X } from 'lucide-react';
 
 export default function App() {
-  const [activeView, setActiveView] = useState('newsletter');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [feedbackText, setFeedbackText] = useState('');
-  const [analytics, setAnalytics] = useState([]);
 
-  useEffect(() => {
-    trackEvent('page', 'load', activeView);
-  }, [activeView]);
+  // Featured products from APIBA partners
+  const featuredProducts = [
+    {
+      name: 'Gin Tanqueray London Dry',
+      brand: 'Diageo',
+      size: '750ml',
+      description: 'Clássico inglês, limpo, com notas de zimbro. Perfeito para um G&T refrescante.',
+      category: 'Gin',
+      color: 'from-green-50 to-emerald-50',
+      icon: Martini
+    },
+    {
+      name: 'Whiskey Jameson Black Barrel',
+      brand: 'Pernod Ricard',
+      size: '700ml',
+      description: 'Suave e complexo, com final de baunilha e carvalho. Para os momentos especiais.',
+      category: 'Whiskey',
+      color: 'from-amber-50 to-orange-50',
+      icon: Flame
+    }
+  ];
 
-  const handleProductClick = (productName, brand) => {
-    trackEvent('product', 'click', `${productName} (${brand})`);
-  };
+  const topSelling = [
+    {
+      name: 'Cerveja 2M',
+      brand: 'CDM',
+      size: '330ml',
+      description: 'A cerveja de Moçambique. Fresca, local, e sempre presente.',
+      trend: '+12%',
+      icon: Beer
+    },
+    {
+      name: 'Cerveja Heineken',
+      brand: 'Heineken',
+      size: '330ml',
+      description: 'Qualidade premium internacional. Reconhecida mundialmente.',
+      trend: '+8%',
+      icon: Beer
+    },
+    {
+      name: 'Vinho Duas Quintas',
+      brand: 'Sogrape',
+      size: '750ml',
+      description: 'Tinto português, versátil e acessível. Ideal para qualquer ocasião.',
+      trend: '+15%',
+      icon: Wine
+    }
+  ];
 
-  const handleBrandClick = (brandName) => {
-    trackEvent('brand', 'click', brandName);
-  };
+  const newArrivals = [
+    { name: 'Sagres Radler', brand: 'Heineken', size: '330ml', description: 'Cerveja com toque cítrico, leve e refrescante' },
+    { name: 'Absolut Vodka', brand: 'Pernod Ricard', size: '750ml', description: 'Vodka sueca premium, pura e versátil' },
+    { name: 'Johnnie Walker Red', brand: 'Diageo', size: '700ml', description: 'Blend clássico escocês, rico e equilibrado' },
+    { name: 'Laurentina', brand: 'CDM', size: '330ml', description: 'Cerveja clara Moçambicana, fresca e suave' },
+  ];
 
-  const handleFeedbackSubmit = (e) => {
-    e.preventDefault();
-    trackEvent('feedback', 'submit', feedbackText);
-    alert('✅ Obrigado! A tua mensagem foi enviada aos nossos clientes da APIBA.');
-    setFeedbackText('');
-    setShowFeedback(false);
-  };
-
-  const loadAnalytics = () => {
-    const events = JSON.parse(localStorage.getItem('mba_analytics') || '[]');
-    setAnalytics(events);
-  };
-
-  const NewsletterView = () => {
-    const topProducts = getTopProducts();
-    const newArrivals = getNewArrivals();
-
-    return (
-      <div className="max-w-2xl mx-auto">
-        {/* MBA Header - Content Agency Identity */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg shadow-lg p-6 mb-6 text-white">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-gray-900 text-2xl font-bold">MBA</span>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white sticky top-0 z-50 shadow-lg">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center shadow-md">
+                <span className="text-gray-900 text-2xl font-bold">MBA</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight">Beverage Magazine</h1>
+                <p className="text-xs text-gray-400">Novembro 2025 · APIBA Partners</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-bold">Mozambican Beverage Agency</h2>
-              <p className="text-sm text-gray-300">Agência de Informação e Conteúdo</p>
+            
+            <button 
+              className="md:hidden p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            <div className="hidden md:flex items-center gap-3 text-sm">
+              <Mail className="w-4 h-4" />
+              <span>Newsletter Mensal</span>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3 text-xs bg-black/20 rounded p-3">
-            <div className="text-center">
-              <Radio className="w-4 h-4 mx-auto mb-1 opacity-75" />
-              <div className="font-medium">Espaço</div>
-              <div className="text-gray-400">Exposição</div>
-            </div>
-            <div className="text-center">
-              <Megaphone className="w-4 h-4 mx-auto mb-1 opacity-75" />
-              <div className="font-medium">Mensagens</div>
-              <div className="text-gray-400">Vinculadas</div>
-            </div>
-            <div className="text-center">
-              <Users className="w-4 h-4 mx-auto mb-1 opacity-75" />
-              <div className="font-medium">Servidor</div>
-              <div className="text-gray-400">Conteúdo</div>
-            </div>
-          </div>
-          <p className="text-xs text-gray-400 mt-3 border-t border-gray-700 pt-3">
-            Conectando produtores e importadores (APIBA) ao mercado Moçambicano através de informação inteligente.
-          </p>
         </div>
+      </header>
 
-        {/* Newsletter Content */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
-          <div className="border-b border-gray-200 pb-6 mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-500">Newsletter Mensal · Parceiros APIBA</span>
-              <span className="text-xs text-gray-400">Novembro 2025</span>
-            </div>
-            <h1 className="text-2xl font-light text-gray-900 mb-1">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Novembro chegou — e com ele, o calor e as bebidas certas
-            </h1>
-            <p className="text-xs text-gray-500 italic mt-2">
-              Conteúdo produzido pela MBA para os membros da APIBA
-            </p>
-          </div>
-
-          <div className="prose prose-sm max-w-none">
-            <p className="text-gray-700 leading-relaxed mb-6">
+            </h2>
+            <p className="text-lg text-blue-100 leading-relaxed">
               Novembro em Maputo é assim: o calor volta devagar, as tardes esticam, e as conversas ganham tempo. 
-              Este mês os nossos parceiros trouxeram opções novas e favoritos de volta. Aqui está o que há para descobrir.
+              Descubra as novidades dos nossos parceiros.
             </p>
-
-            {/* Sponsored/Featured Products */}
-            <div className="bg-blue-50 rounded-lg p-6 mb-6 border-l-4 border-blue-500">
-              <div className="flex items-center gap-2 mb-4">
-                <Star className="w-5 h-5 text-blue-600" />
-                <h2 className="text-lg font-medium text-gray-900">Em Destaque Este Mês</h2>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded ml-auto">Patrocinado</span>
-              </div>
-              
-              <div className="space-y-4">
-                {newArrivals.filter(p => p.sponsor).map((product, i) => (
-                  <div 
-                    key={i}
-                    className="bg-white rounded-lg p-4 cursor-pointer hover:shadow-md transition-all border border-blue-200"
-                    onClick={() => handleProductClick(product.name, product.brand)}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="font-medium text-gray-900">{product.name} ({product.size})</h3>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); handleBrandClick(product.brand); }}
-                          className="text-xs text-blue-600 hover:underline"
-                        >
-                          {product.brand}
-                        </button>
-                      </div>
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{product.type}</span>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {product.type === 'Gin' && 'Clássico inglês, limpo, com notas de zimbro. Funciona bem com tónica ou num G&T simples.'}
-                      {product.type === 'Whiskey' && 'Suave, com final de baunilha e carvalho. Para quem gosta de whiskey irlandês mas procura algo com mais corpo.'}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* New Arrivals (Non-sponsored) */}
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Package className="w-5 h-5 text-gray-600" />
-                <h2 className="text-lg font-medium text-gray-900">Novos em Stock</h2>
-              </div>
-              
-              <div className="space-y-3">
-                {newArrivals.filter(p => !p.sponsor).map((product, i) => (
-                  <div 
-                    key={i}
-                    className="border-l-2 border-gray-300 pl-4 cursor-pointer hover:border-blue-500 transition-colors"
-                    onClick={() => handleProductClick(product.name, product.brand)}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-gray-900">{product.name} ({product.size})</h3>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); handleBrandClick(product.brand); }}
-                        className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
-                      >
-                        {product.brand}
-                      </button>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {product.type === 'Cerveja' && 'Leve, com toque cítrico. Perfeita para quem quer algo refrescante sem o peso de uma imperial completa.'}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Market Intelligence */}
-            <div className="bg-amber-50 rounded-lg p-6 mb-6">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-amber-600" />
-                <h2 className="text-lg font-medium text-gray-900">Inteligência de Mercado</h2>
-              </div>
-              
-              <div className="space-y-4">
-                <p className="text-sm text-gray-700 italic">
-                  Com base nos dados dos nossos parceiros APIBA, estas são as categorias em crescimento este mês:
-                </p>
-                {topProducts.map((product, i) => (
-                  <div 
-                    key={i}
-                    className="border-l-2 border-amber-300 pl-4 cursor-pointer hover:border-amber-600 transition-colors"
-                    onClick={() => handleProductClick(product.name, product.brand)}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-gray-900">{product.name}</h3>
-                      <div className="flex items-center gap-2">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); handleBrandClick(product.brand); }}
-                          className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
-                        >
-                          {product.brand}
-                        </button>
-                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded font-medium">{product.trend}</span>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {i === 0 ? 'Lidera nas vendas. Local, fresca, e presente em todo o lado.' : 
-                       'Crescimento consistente. Português, acessível, versatil.'}
-                    </p>
-                  </div>
-                ))}
-                <div className="bg-white rounded p-3 text-sm text-gray-600 border border-amber-200">
-                  <strong>Observação:</strong> Sextas-feiras mostram picos de compra. Possível ritual de fim de semana.
-                </div>
-              </div>
-            </div>
-
-            {/* Contact */}
-            <div className="border-t border-gray-200 pt-6">
-              <p className="text-sm text-gray-600 mb-4">
-                A MBA conecta a informação dos produtores e importadores ao mercado. Para consultas directas, 
-                contacte os nossos parceiros APIBA ou ligue para <span className="font-medium">+258 84 XXX XXXX</span>.
-              </p>
-            </div>
-
-            {/* Feedback */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-gray-50 rounded-lg border border-blue-200">
-              <p className="text-sm text-gray-700 mb-3">
-                <strong>💬 Feedback ao mercado:</strong> Há algo que procura e não encontra? A MBA transmite a mensagem aos nossos parceiros.
-              </p>
-              {!showFeedback ? (
-                <button 
-                  onClick={() => setShowFeedback(true)}
-                  className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors flex items-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Enviar feedback aos parceiros APIBA
-                </button>
-              ) : (
-                <form onSubmit={handleFeedbackSubmit} className="space-y-3">
-                  <input 
-                    type="text"
-                    value={feedbackText}
-                    onChange={(e) => setFeedbackText(e.target.value)}
-                    placeholder="Ex: Vodka Grey Goose, Cerveja Corona..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
-                    required
-                  />
-                  <div className="flex gap-2">
-                    <button 
-                      type="submit"
-                      className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    >
-                      Enviar à APIBA
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => setShowFeedback(false)}
-                      className="text-sm bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
           </div>
         </div>
+      </div>
 
-        {/* APIBA Partners */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="mb-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-1">Parceiros APIBA</h3>
-            <p className="text-xs text-gray-600">Clientes da MBA · Produtores e Importadores de Bebidas Alcoólicas</p>
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        
+        {/* Featured Products */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <Star className="w-8 h-8 text-amber-500" />
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Em Destaque</h2>
+              <p className="text-sm text-gray-600">Produtos selecionados este mês</p>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {apibaMembers.map((member, i) => (
-              <button
-                key={i}
-                onClick={() => handleBrandClick(member.name)}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
-              >
-                <div className="font-medium text-gray-900 mb-1">{member.name}</div>
-                <div className="text-xs text-gray-600 mb-2">{member.fullName}</div>
-                <div className="flex flex-wrap gap-1">
-                  {member.brands.slice(0, 3).map((brand, j) => (
-                    <span key={j} className="text-xs bg-white text-gray-700 px-2 py-1 rounded border border-gray-200">
-                      {brand}
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {featuredProducts.map((product, i) => {
+              const Icon = product.icon;
+              return (
+                <div key={i} className={`bg-gradient-to-br ${product.color} rounded-2xl p-8 border-2 border-white shadow-lg hover:shadow-xl transition-all`}>
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-md">
+                      <Icon className="w-8 h-8 text-gray-700" />
+                    </div>
+                    <span className="text-xs font-medium bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-gray-700">
+                      {product.brand}
                     </span>
-                  ))}
-                  {member.brands.length > 3 && (
-                    <span className="text-xs text-gray-500 px-2 py-1">
-                      +{member.brands.length - 3}
-                    </span>
-                  )}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-sm text-gray-600 mb-1">{product.size} · {product.category}</p>
+                  <p className="text-gray-700 leading-relaxed">{product.description}</p>
                 </div>
-              </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Top Selling */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <TrendingUp className="w-8 h-8 text-blue-600" />
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Mais Vendidos</h2>
+              <p className="text-sm text-gray-600">O que está a sair rápido</p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {topSelling.map((product, i) => {
+              const Icon = product.icon;
+              return (
+                <div key={i} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <span className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded">
+                      {product.trend}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">{product.name}</h3>
+                  <p className="text-xs text-gray-500 mb-3">{product.size} · {product.brand}</p>
+                  <p className="text-sm text-gray-600">{product.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* New Arrivals */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">NEW</span>
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Novos em Stock</h2>
+              <p className="text-sm text-gray-600">Acabaram de chegar</p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {newArrivals.map((product, i) => (
+              <div key={i} className="bg-white rounded-lg p-5 border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-bold text-gray-900">{product.name}</h3>
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded shrink-0 ml-2">
+                    {product.brand}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mb-2">{product.size}</p>
+                <p className="text-sm text-gray-600">{product.description}</p>
+              </div>
             ))}
           </div>
-        </div>
-      </div>
-    );
-  };
+        </section>
 
-  const AnalyticsView = () => {
-    useEffect(() => {
-      loadAnalytics();
-    }, []);
-
-    const productClicks = analytics.filter(e => e.category === 'product');
-    const brandClicks = analytics.filter(e => e.category === 'brand');
-    const feedbacks = analytics.filter(e => e.category === 'feedback');
-
-    return (
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-2xl font-light text-gray-900 mb-2">Dashboard de Performance</h2>
-          <p className="text-gray-600">Métricas de engagement para clientes APIBA</p>
-        </div>
-
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-3xl font-light text-gray-900 mb-1">{analytics.length}</div>
-            <div className="text-sm text-gray-600">Total eventos</div>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-3xl font-light text-gray-900 mb-1">{productClicks.length}</div>
-            <div className="text-sm text-gray-600">Produtos clicados</div>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-3xl font-light text-gray-900 mb-1">{brandClicks.length}</div>
-            <div className="text-sm text-gray-600">Marcas clicadas</div>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-3xl font-light text-gray-900 mb-1">{feedbacks.length}</div>
-            <div className="text-sm text-gray-600">Feedbacks</div>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-medium text-gray-900 mb-4">Produtos Mais Clicados</h3>
-            <div className="space-y-2">
-              {productClicks.slice(-5).reverse().map((event, i) => (
-                <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-100">
-                  <span className="text-gray-700">{event.label}</span>
-                  <span className="text-xs text-gray-500">{new Date(event.timestamp).toLocaleTimeString('pt-PT')}</span>
-                </div>
-              ))}
-              {productClicks.length === 0 && (
-                <p className="text-sm text-gray-500 italic">Nenhum clique ainda</p>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-medium text-gray-900 mb-4">Marcas Mais Clicadas</h3>
-            <div className="space-y-2">
-              {brandClicks.slice(-5).reverse().map((event, i) => (
-                <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-100">
-                  <span className="text-gray-700">{event.label}</span>
-                  <span className="text-xs text-gray-500">{new Date(event.timestamp).toLocaleTimeString('pt-PT')}</span>
-                </div>
-              ))}
-              {brandClicks.length === 0 && (
-                <p className="text-sm text-gray-500 italic">Nenhum clique ainda</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h3 className="font-medium text-gray-900 mb-4">Feedback do Mercado</h3>
-          <div className="space-y-2">
-            {feedbacks.map((event, i) => (
-              <div key={i} className="p-3 bg-blue-50 rounded text-sm border border-blue-100">
-                <div className="font-medium text-gray-900">{event.label}</div>
-                <div className="text-xs text-gray-500 mt-1">{new Date(event.timestamp).toLocaleString('pt-PT')}</div>
+        {/* Partners Section */}
+        <section className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-white">
+          <h2 className="text-2xl font-bold mb-6">Parceiros APIBA</h2>
+          <div className="grid md:grid-cols-5 gap-6">
+            {[
+              { name: 'CDM', brands: '2M, Laurentina, Manica' },
+              { name: 'Heineken', brands: 'Heineken, Amstel, Sagres' },
+              { name: 'Pernod Ricard', brands: 'Jameson, Absolut, Chivas' },
+              { name: 'Diageo', brands: 'Johnnie Walker, Smirnoff, Tanqueray' },
+              { name: 'Socimpex', brands: 'Marcas importadas' },
+            ].map((partner, i) => (
+              <div key={i} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <div className="font-bold text-lg mb-2">{partner.name}</div>
+                <div className="text-xs text-gray-300">{partner.brands}</div>
               </div>
             ))}
-            {feedbacks.length === 0 && (
-              <p className="text-sm text-gray-500 italic">Nenhum feedback recebido</p>
-            )}
           </div>
-        </div>
+        </section>
 
-        <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-lg border border-blue-200 p-6">
-          <h3 className="font-medium text-gray-900 mb-2">Para Clientes APIBA</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Estes dados mostram como o mercado interage com as vossas mensagens. A MBA fornece o espaço e a inteligência — 
-            vocês fornecem os produtos e a estratégia.
-          </p>
-          <p className="text-xs text-gray-500">
-            Próximos passos: Relatórios mensais personalizados por marca, análise de tendências, e recomendações de conteúdo.
-          </p>
-        </div>
-      </div>
-    );
-  };
-
-  const SystemView = () => (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-light text-gray-900 mb-2">Como Funciona a MBA</h2>
-        <p className="text-gray-600">Agência de Informação para o Sector de Bebidas</p>
-      </div>
-
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg p-8 mb-8">
-        <h3 className="text-xl font-medium mb-4">O Modelo MBA</h3>
-        <div className="grid md:grid-cols-3 gap-6 mb-6">
-          <div>
-            <Radio className="w-8 h-8 mb-3 opacity-75" />
-            <h4 className="font-medium mb-2">Espaço & Exposição</h4>
-            <p className="text-sm text-gray-300">
-              Fornecemos plataformas (newsletter, web, eventos) onde marcas ganham visibilidade.
-            </p>
-          </div>
-          <div>
-            <Megaphone className="w-8 h-8 mb-3 opacity-75" />
-            <h4 className="font-medium mb-2">Vinculamos Mensagens</h4>
-            <p className="text-sm text-gray-300">
-              Conectamos as mensagens dos produtores ao público certo — consumidores, bares, distribuidores.
-            </p>
-          </div>
-          <div>
-            <Users className="w-8 h-8 mb-3 opacity-75" />
-            <h4 className="font-medium mb-2">Servidores de Conteúdo</h4>
-            <p className="text-sm text-gray-300">
-              Não vendemos bebidas. Distribuímos informação, insights e inteligência de mercado.
-            </p>
-          </div>
-        </div>
-        <div className="border-t border-gray-700 pt-4">
-          <p className="text-sm text-gray-400">
-            <strong>A MBA é a ponte entre APIBA e o mercado.</strong> Os produtores fornecem dados e produtos. 
-            Nós transformamos isso em narrativa, análise e exposição.
-          </p>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="font-medium text-gray-900 mb-3">Fluxo de Informação</h3>
-          <div className="space-y-2 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Clientes APIBA → Dados de produtos</span>
+        {/* Observação */}
+        <section className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center shrink-0">
+              <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>MBA → Análise + Narrativa</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Newsletter → Mercado</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Feedback → De volta aos clientes</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="font-medium text-gray-900 mb-3">Serviços MBA</h3>
-          <div className="space-y-2 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-gray-400" />
-              <span>Newsletter mensal</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-gray-400" />
-              <span>Relatórios de engagement</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-gray-400" />
-              <span>Inteligência de mercado</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Megaphone className="w-4 h-4 text-gray-400" />
-              <span>Gestão de mensagens</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="font-medium text-gray-900 mb-4">Próximos Passos de Evolução</h3>
-        <div className="space-y-3 text-sm">
-          <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">1</div>
             <div>
-              <div className="font-medium text-gray-900">Portal B2B para Clientes</div>
-              <div className="text-gray-600">Dashboard onde APIBA members vêem analytics em tempo real das suas marcas</div>
+              <h3 className="font-bold text-gray-900 mb-2">Observação do Mercado</h3>
+              <p className="text-gray-700">
+                Notámos que as sextas-feiras mostram picos consistentes de compra. Possível ritual de início de fim de semana. 
+                Cervejas locais e vinhos portugueses lideram as preferências.
+              </p>
             </div>
           </div>
-          <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">2</div>
+        </section>
+
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white mt-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <div className="font-medium text-gray-900">Conteúdo Automatizado</div>
-              <div className="text-gray-600">Claude API gera edições baseadas em dados de vendas dos clientes</div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-gray-900 text-lg font-bold">MBA</span>
+                </div>
+                <div>
+                  <div className="font-bold">Beverage Magazine</div>
+                  <div className="text-xs text-gray-400">by MBA</div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-400">
+                Newsletter mensal de bebidas para o mercado Moçambicano
+              </p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-3">Contacto</h4>
+              <p className="text-sm text-gray-400">+258 84 XXX XXXX</p>
+              <p className="text-sm text-gray-400">Av. Julius Nyerere, Maputo</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-3">Parceiros</h4>
+              <p className="text-sm text-gray-400">CDM · Heineken · Pernod Ricard</p>
+              <p className="text-sm text-gray-400">Diageo · Socimpex</p>
             </div>
           </div>
-          <div className="flex gap-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">3</div>
-            <div>
-              <div className="font-medium text-gray-900">Slots Patrocinados</div>
-              <div className="text-gray-600">Secções "Em Destaque" pagas para maior exposição de produtos específicos</div>
-</div>
-</div>
-<div className="flex gap-3">
-<div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-medium shrink-0">4</div>
-<div>
-<div className="font-medium text-gray-900">Relatórios de Mercado</div>
-<div className="text-gray-600">Vendas mensais como serviço premium para distribuidores e bares</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-);
-return (
-<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-<header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-<div className="flex items-center justify-between h-16">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 bg-gray-900 rounded flex items-center justify-center">
-<span className="text-white text-base font-bold">MBA</span>
-</div>
-<div>
-<h1 className="text-base font-bold text-gray-900">MBA</h1>
-<p className="text-xs text-gray-500">Agência de Informação</p>
-</div>
-</div> <nav className="hidden md:flex items-center gap-6">
-          <button
-            onClick={() => setActiveView('newsletter')}
-            className={`text-sm transition-colors ${
-              activeView === 'newsletter' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Newsletter
-          </button>
-          <button
-            onClick={() => setActiveView('analytics')}
-            className={`text-sm transition-colors ${
-              activeView === 'analytics' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Analytics
-          </button>
-          <button
-            onClick={() => setActiveView('system')}
-            className={`text-sm transition-colors ${
-              activeView === 'system' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Sistema
-          </button>
-        </nav>
-
-        <button 
-          className="md:hidden p-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {mobileMenuOpen && (
-        <nav className="md:hidden py-4 border-t border-gray-200">
-          <button
-            onClick={() => { setActiveView('newsletter'); setMobileMenuOpen(false); }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-          >
-            Newsletter
-          </button>
-          <button
-            onClick={() => { setActiveView('analytics'); setMobileMenuOpen(false); }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-          >
-            Analytics
-          </button>
-          <button
-            onClick={() => { setActiveView('system'); setMobileMenuOpen(false); }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
-          >
-            Sistema
-          </button>
-        </nav>
-      )}
+          <div className="border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
+            © 2025 MBA · Membros da APIBA
+          </div>
+        </div>
+      </footer>
     </div>
-  </header>
-
-  <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    {activeView === 'newsletter' && <NewsletterView />}
-    {activeView === 'analytics' && <AnalyticsView />}
-    {activeView === 'system' && <SystemView />}
-  </main>
-
-  <footer className="bg-white border-t border-gray-200 mt-16">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid md:grid-cols-3 gap-8 text-sm">
-        <div>
-          <h4 className="font-medium text-gray-900 mb-2">MBA</h4>
-          <p className="text-gray-600 text-xs leading-relaxed">
-            Agência de informação e conteúdo para o sector de bebidas em Moçambique. 
-            Servidor de conteúdo para membros da APIBA.
-          </p>
-        </div>
-        <div>
-          <h4 className="font-medium text-gray-900 mb-2">Contacto</h4>
-          <p className="text-gray-600 text-xs">+258 84 XXX XXXX</p>
-          <p className="text-gray-600 text-xs">Av. Julius Nyerere, Maputo</p>
-          <p className="text-gray-600 text-xs mt-2">Para consultas comerciais, contacte os nossos parceiros APIBA</p>
-        </div>
-        <div>
-          <h4 className="font-medium text-gray-900 mb-2">O Que Fazemos</h4>
-          <p className="text-gray-600 text-xs">✓ Espaço e exposição</p>
-          <p className="text-gray-600 text-xs">✓ Vinculação de mensagens</p>
-          <p className="text-gray-600 text-xs">✓ Servidor de conteúdo</p>
-          <p className="text-gray-600 text-xs">✓ Inteligência de mercado</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-</div>
+  );
+}
