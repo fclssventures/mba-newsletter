@@ -4,7 +4,6 @@ import { Wine, Beer, Martini, Flame, TrendingUp, Star, Mail, Menu, X } from 'luc
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Featured products from APIBA partners
   const featuredProducts = [
     {
       name: 'Gin Tanqueray London Dry',
@@ -62,7 +61,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
@@ -91,7 +89,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -108,7 +105,6 @@ export default function App() {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
         
-        {/* Featured Products */}
         <section>
           <div className="flex items-center gap-3 mb-8">
             <Star className="w-8 h-8 text-amber-500" />
@@ -140,7 +136,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* Top Selling */}
         <section>
           <div className="flex items-center gap-3 mb-8">
             <TrendingUp className="w-8 h-8 text-blue-600" />
@@ -172,7 +167,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* New Arrivals */}
         <section>
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -200,7 +194,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* Partners Section */}
         <section className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-white">
           <h2 className="text-2xl font-bold mb-6">Parceiros APIBA</h2>
           <div className="grid md:grid-cols-5 gap-6">
@@ -219,7 +212,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* Observação */}
         <section className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-6">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center shrink-0">
@@ -237,7 +229,6 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
       <footer className="bg-gray-900 text-white mt-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
